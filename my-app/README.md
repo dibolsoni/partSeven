@@ -1,3 +1,8 @@
+## React Gallery from Treehouse unit 06 project
+by Decebe
+
+A API photo gallery made with React.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
