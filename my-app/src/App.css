@@ -4,6 +4,17 @@ body {
 
 }
 
+a:link {
+  text-decoration: none
+}
+a:visited {
+  text-decoration: none
+}
+a:hover {
+  text-decoration: underline;
+  color: #FF0000;
+}
+
 button {
   margin: 10px 10px;
   padding: 15px 32px;
@@ -25,6 +36,7 @@ header {
 
 #logo {
   margin: 10px;
+  padding: 10px 50px;
   height: 200px;
   width: 200px;
 

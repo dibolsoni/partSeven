@@ -2,6 +2,11 @@ import React from 'react';
 
 import GalleryItem from './Gallery-item';
 
+
+/**the main gallary component
+ * @param photos that will be displayed
+ * display the gallery
+*/
 const Gallery = ({photos}) => {
     let newPhotos;
     if (photos.length > 0) {

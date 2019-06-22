@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
-export default class SearchForm extends Component {
+
+class SearchForm extends Component {
   
   state = {
     searchText: ''
   }
   
+  /**Populates the searchText state each time the value of input is changed
+   * @param e event handler
+   */
   onSearchChange = e => {
     this.setState({ searchText: e.target.value });
   }
   
+  /**Submit the search input
+  * @param e event handler
+   * perform a search from the Flickr API and populates the photos
+   * redirect to main page to display the results
+   */
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onSearch(this.query.value)
+    const path = `/search/${this.state.searchText}`;
+    this.props.history.push(path);
+    this.props.onSearch(this.state.searchText)
     e.currentTarget.reset();
+
   }
   
   render() {  
@@ -29,3 +42,5 @@ export default class SearchForm extends Component {
     );
   }
 }
+
+export default withRouter(SearchForm);

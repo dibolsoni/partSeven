@@ -13,8 +13,6 @@ import apiKey from '../config';
 
 import Header from './Header';
 import Gallery from './Gallery';
-import Nav from "./Nav";
-import SearchForm from "./SearchForm";
 import NotFound from './NotFound';
 
 export class App extends Component {
@@ -25,50 +23,95 @@ export class App extends Component {
     this.state = {
       photos: [],
       loading: true,
+      cats: [],
+      dogs: [],
+      computer: []
     }
   }
 
+  /**calls search function when mounting the component
+  */
   componentDidMount() {
+    this.performSearch('cats');
+    this.performSearch('dogs');
+    this.performSearch('computer');
     this.performSearch();
+
   }
 
+  /**Unmount the state objs to prevent memmory leak
+  */
   componentWillUnmount() {
     clearInterval(this.state.photos);
+    clearInterval(this.state.dogs);
+    clearInterval(this.state.cats);
+    clearInterval(this.state.computer);
   }
 
-  performSearch = (topic = 'any') => {
+  /**perform a search using axios API from Flickr
+   * @param topic what topic will search for
+   * populates the results in arrays
+  */
+  performSearch = (topic = 'photoartwork') => {
       this.setState({loading:true})
       const per_page = 24;
       const format = 'json';
-      const url = `https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=${apiKey}&tags=${topic}&accuracy=1&privacy_filter=1&per_page=${per_page}&format=${format}&nojsoncallback=1`;
+      const url = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${topic}%2Cphotograph&text=${topic}&per_page=${per_page}&format=${format}&nojsoncallback=1`;
       axios.get(url)
         .then((response) => {
-          this.setState({
+          topic === 'cats' ? this.setState({
+                            cats: response.data.photos.photo,
+                            loading: false
+                          })
+          : topic === 'dogs' ? this.setState({
+                              dogs: response.data.photos.photo,
+                              loading: false
+                            }) 
+          : topic === 'computer' ? this.setState({
+                                  computer: response.data.photos.photo,
+                                  loading: false
+                                }) 
+          : this.setState({
             photos: response.data.photos.photo,
             loading: false
-          })
+            })                      
+
         })
         .catch((err) => {
           console.log('Error fetching and parsing data', err);
         })
   }
 
+  /**render the route with components
+  */
   render() { 
     return (
       <BrowserRouter>
           <div className='container'>
-              <Header /> 
+              <Header 
+                Search={this.performSearch}
+                history={this.props.history}
+              /> 
               <Switch>
                 <Route exact path='/' render={ () => ( 
                   <div className="main-content">
-                    <SearchForm onSearch={this.performSearch} />
-                    <Nav onMenuClick={this.performSearch} />    
                     {
                       this.state.loading ? <p> Loading ...</p> : this.state.photos ? <Gallery photos={ this.state.photos } /> : <NotFound /> 
                     }
                   </div>
                   )} 
                 />
+                <Route path='/search/' render={ () => ( 
+                  <div className="main-content">
+                    {
+                      this.state.loading ? <p> Loading ...</p> : this.state.photos ? <Gallery photos={ this.state.photos } /> : <NotFound /> 
+                    }
+                  </div>
+                  )} 
+                />
+                <Route path='/tags/cats' render={() => <Gallery photos={ this.state.cats } />} />
+                <Route path='/tags/dogs' render={() => <Gallery photos={ this.state.dogs } />} />
+                <Route path='/tags/computer' render={() => <Gallery photos={ this.state.computer } />} />
                 <Route component={NotFound} />
               </Switch>
 
@@ -78,8 +121,6 @@ export class App extends Component {
 
     );
   }
-
   
 }
-
 export default App;

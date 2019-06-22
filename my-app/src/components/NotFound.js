@@ -1,6 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
+
+/**Generate a error message - 404
+ */
 const NotFound = () => (
     <div>
         <h3> Error 404 </h3>
