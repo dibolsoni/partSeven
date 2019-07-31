@@ -8,6 +8,12 @@ A API photo gallery made with React.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Flickr API Key
+In order to use this you need to create a account in [Flickr API](https://www.flickr.com/services/api/misc.api_keys.html), generates a key and creates a config.js file like this:
+```
+const apikey = 'your_key_here'
+export default apikey;
+```
 ## Available Scripts
 
 In the project directory, you can run:
